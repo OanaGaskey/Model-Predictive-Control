@@ -42,8 +42,10 @@ class FG_eval {
      * NOTE: You'll probably go back and forth between this function and
      *   the Solver function below.
      */
+
+    //fg[0] is reserved for the cost function
     fg[0] = 0;
-    
+
     // The part of the cost based on the reference state.
     for (int t = 0; t < N; t++) {
       fg[0] += CppAD::pow(vars[cte_start + t], 2);
@@ -62,6 +64,14 @@ class FG_eval {
       fg[0] += CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
       fg[0] += CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
     }
+
+    // Initialize the model
+    fg[1 + x_start] = vars[x_start];
+    fg[1 + y_start] = vars[y_start];
+    fg[1 + psi_start] = vars[psi_start];
+    fg[1 + v_start] = vars[v_start];
+    fg[1 + cte_start] = vars[cte_start];
+    fg[1 + epsi_start] = vars[epsi_start];
   }
 };
 
