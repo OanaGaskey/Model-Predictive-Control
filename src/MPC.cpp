@@ -27,6 +27,10 @@ double dt = 0.05;
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
 
+double ref_cte = 0;
+double ref_epsi = 0;
+double ref_v = 100;
+
 class FG_eval {
  public:
   // Fitted polynomial coefficients
@@ -43,7 +47,7 @@ class FG_eval {
      *   the Solver function below.
      */
 
-    // Map the system variables into vars
+    // Map the system variables into vars index
     x_start = 0;
     y_start = x_start + N;
     psi_start = y_start + N;
@@ -53,9 +57,11 @@ class FG_eval {
     delta_start = epsi_start + N;
     a_start = delta_start + N - 1;
 
+    // Vector fg is where the cost function and vehicle model/constraints are defined
 
     //fg[0] is reserved for the cost function
     fg[0] = 0;
+
 
     // The part of the cost based on the reference state.
     for (int t = 0; t < N; t++) {
