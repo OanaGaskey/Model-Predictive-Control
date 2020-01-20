@@ -43,6 +43,17 @@ class FG_eval {
      *   the Solver function below.
      */
 
+    // Map the system variables into vars
+    x_start = 0;
+    y_start = x_start + N;
+    psi_start = y_start + N;
+    v_start = psi_start + N;
+    cte_start = v_start + N;
+    epsi_start = cte_start + N;
+    delta_start = epsi_start + N;
+    a_start = delta_start + N - 1;
+
+
     //fg[0] is reserved for the cost function
     fg[0] = 0;
 
