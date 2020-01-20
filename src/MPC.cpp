@@ -31,6 +31,16 @@ double ref_cte = 0;
 double ref_epsi = 0;
 double ref_v = 100;
 
+// Map the system variables into vars index
+size_t x_start = 0;
+size_t y_start = x_start + N;
+size_t psi_start = y_start + N;
+size_t v_start = psi_start + N;
+size_t cte_start = v_start + N;
+size_t epsi_start = cte_start + N;
+size_t delta_start = epsi_start + N;
+size_t a_start = delta_start + N - 1;
+
 class FG_eval {
  public:
   // Fitted polynomial coefficients
@@ -46,16 +56,6 @@ class FG_eval {
      * NOTE: You'll probably go back and forth between this function and
      *   the Solver function below.
      */
-
-    // Map the system variables into vars index
-    x_start = 0;
-    y_start = x_start + N;
-    psi_start = y_start + N;
-    v_start = psi_start + N;
-    cte_start = v_start + N;
-    epsi_start = cte_start + N;
-    delta_start = epsi_start + N;
-    a_start = delta_start + N - 1;
 
     // Vector fg is where the cost function and vehicle model/constraints are defined
 
@@ -143,19 +143,26 @@ MPC::~MPC() {}
 
 std::vector<double> MPC::Solve(const VectorXd &state, const VectorXd &coeffs) {
   bool ok = true;
+  size_t i;
   typedef CPPAD_TESTVECTOR(double) Dvector;
 
+  double x = state[0];
+  double y = state[1];
+  double psi = state[2];
+  double v = state[3];
+  double cte = state[4];
+  double epsi = state[5];
   /**
    * TODO: Set the number of model variables (includes both states and inputs).
    * For example: If the state is a 4 element vector, the actuators is a 2
    *   element vector and there are 10 timesteps. The number of variables is:
    *   4 * 10 + 2 * 9
    */
-  size_t n_vars = 0;
+  size_t n_vars = N * 6 + (N-1)*2;
   /**
    * TODO: Set the number of constraints
    */
-  size_t n_constraints = 0;
+  size_t n_constraints = N * 6;
 
   // Initial value of the independent variables.
   // SHOULD BE 0 besides initial state.
