@@ -177,6 +177,13 @@ std::vector<double> MPC::Solve(const VectorXd &state, const VectorXd &coeffs) {
    * TODO: Set lower and upper limits for variables.
    */
 
+  // Set all non-actuators upper and lowerlimits
+  // to the max negative and positive values.
+  for (int i = 0; i < delta_start; i++) {
+    vars_lowerbound[i] = -1.0e19;
+    vars_upperbound[i] = 1.0e19;
+  }
+  
   // Lower and upper limits for the constraints
   // Should be 0 besides initial state.
   Dvector constraints_lowerbound(n_constraints);
