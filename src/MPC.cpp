@@ -83,6 +83,20 @@ class FG_eval {
     fg[1 + v_start] = vars[v_start];
     fg[1 + cte_start] = vars[cte_start];
     fg[1 + epsi_start] = vars[epsi_start];
+
+    // Constraints for psi = car's orientation
+    for (int t = 1; t < N ; ++t) {
+      // psi, v, delta at time t
+      AD<double> psi0 = vars[psi_start + t - 1];
+      AD<double> v0 = vars[v_start + t - 1];
+      AD<double> delta0 = vars[delta_start + t - 1];
+
+      // psi at time t+1
+      AD<double> psi1 = vars[psi_start + t];
+
+      // how psi changes
+      fg[1 + psi_start + t] = psi1 - (psi0 + v0 * delta0 / Lf * dt);
+    }
   }
 };
 
