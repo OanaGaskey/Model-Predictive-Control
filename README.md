@@ -1,5 +1,14 @@
-# CarND-Controls-MPC
-Self-Driving Car Engineer Nanodegree Program
+# Model Predictive Controller
+
+Model Predictive Controller to steer a car for following reference trajectory while driving around a curved track.
+
+A Model Predictive controller was succesfully able to control a car moving at high speeds safely around the simulated track. The parmaters were chosen so that the time step was .1 and the total steps was 10, so the MPC was planning 1 second into the future. Also the cost function was created so that a very high weight was given to cte and epsi making it so the car could have a reference velocity of 100mph but still be agressive about slowing down on tight corners. The max speed of the car was around 92MPH on the stright away and this could have been even increased but was lowered just for extra safety.
+
+A time step of 1 second was picked just from experimentation, for example longer time frames such as 3-5 seconds would cause the car to drive off the road, because it was too much for the cost function to consider. The MPC did much better on small batches of time for getting good cost function results. Having about 10 points seemed like a decent collection size of points so thats why .1 was chosen, while anything higher might be too sparse and anything lower was not adding much value.
+
+In order to make the polynominal equations easier to fit, and also calculate estimated cte values easily, the reference frame of the car was shifted to (0,0) and its heading direction was rotated to zero degrees. The result of this shift meant that the fitted polynominal was mostly horizontal where if it was vertical it would result in extreamly high coeifficent values. Also the y evaluation values could simply be used to estimate the cte values when the polynomial was at this reference frame.
+
+In order to handle the 100ms delay the intial position was first projected .1 seconds into the future and then given to the MPC to process. This technique was just an estimation that worked well for small amounts of delay, but at higher delays than 100ms the method was not accurate enough to control the car.
 
 ---
 
